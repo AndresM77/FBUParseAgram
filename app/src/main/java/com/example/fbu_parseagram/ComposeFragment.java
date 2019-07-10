@@ -46,6 +46,7 @@ public class ComposeFragment extends Fragment {
     public String photoFileName = "photo.jpg";
     private File photoFile;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class ComposeFragment extends Fragment {
         captureButton = view.findViewById(R.id.c_capture_image);
         ivPostImage = view.findViewById(R.id.c_post_image);
         submitButtom = view.findViewById(R.id.c_submit);
+
 
         captureButton.setOnClickListener(new View.OnClickListener(){
             @Override
