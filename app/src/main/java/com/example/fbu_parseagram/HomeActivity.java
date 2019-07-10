@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // define your fragments here
         final Fragment fragment1 = new TimelineFragment();
-        final Fragment fragment2 = new CameraKitFragment();
+        final Fragment fragment2 = new ComposeFragment();
 
         // handle navigation selection
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -63,53 +63,13 @@ public class HomeActivity extends AppCompatActivity {
                 });
         // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.action_favorites);
-        /*
-        //Setting view objects
-        descriptionInput = findViewById(R.id.description_et);
-        createButton = findViewById(R.id.create_btn);
-        refreshButton = findViewById(R.id.refresh_btn);
-        logoutButton = findViewById(R.id.logout_btn);
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ParseUser.logOut();
-                Log.d("HomeActivity", "Current User = " + ParseUser.getCurrentUser());
-                Intent i = new Intent(HomeActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (null == savedInstanceState) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, Camera2BasicFragment.newInstance())
-                            .commit();
-                }
-
-                final String description = descriptionInput.getText().toString();
-                final ParseUser user = ParseUser.getCurrentUser();
-                //take info from camera that user has
-                final File file = new File(imagePath);
-                final ParseFile parseFile = new ParseFile(file);
-
-                //create a post
-                createPost(description, parseFile, user);
-            }
-        });
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadTopPosts();
-            }
-        });
-        */
     }
+
+
+
+
+
 
 
 }

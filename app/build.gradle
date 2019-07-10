@@ -30,6 +30,7 @@ dependencies {
     //Parse implementation
     implementation 'com.parse.bolts:bolts-android:1.4.0'
     implementation 'com.parse:parse-android:1.17.3'
+    implementation 'com.parse:parseui-widget-android:0.0.2'
 //    implementation 'com.camerakit:camerakit:1.0.0-beta3.11'
     implementation 'com.camerakit:camerakit:1.0.0-beta3.10'
     implementation 'com.camerakit:jpegkit:0.1.0'
