@@ -1,6 +1,5 @@
 package com.example.fbu_parseagram;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +9,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.parse.ParseUser;
+import com.example.fbu_parseagram.model.Post;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 public class TimelineFragment extends Fragment {
 
-
+    private RecyclerView rvPosts;
+    public final static String TAG = "TimelineFragment";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     private EditText descriptionInput;
     private Button createButton;
@@ -35,41 +41,34 @@ public class TimelineFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
+
         //Setting view objects
-        descriptionInput = view.findViewById(R.id.description_et);
-        createButton = view.findViewById(R.id.create_btn);
-        refreshButton = view.findViewById(R.id.refresh_btn);
-        logoutButton = view.findViewById(R.id.logout_btn);
+        rvPosts = view.findViewById(R.id.rvPosts);
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        //create adapter
+        //create data source
+        //set adapter on recycler view
+
+        queryPosts();
+    }
+
+    private void queryPosts() {
+        ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
+        postQuery.include(Post.KEY_USER);
+        postQuery.findInBackground(new FindCallback<Post>() {
             @Override
-            public void onClick(View view) {
-                ParseUser.logOut();
-                Log.d("HomeActivity", "Current User = " + ParseUser.getCurrentUser());
-                Intent i = new Intent(getContext(), MainActivity.class);
-                startActivity(i);
-            }
-        });
-
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (null == savedInstanceState) {
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container, CameraKitFragment.newInstance())
-                            .commit();
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with Querey");
+                    e.printStackTrace();
+                    return;
+                }
+                for (int i = 0; i < posts.size(); i++) {
+                    Post post = posts.get(i);
+                    Log.d(TAG, "Post" + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
             }
         });
-
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
-
-
     }
 
 
