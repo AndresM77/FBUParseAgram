@@ -1,6 +1,7 @@
 package com.example.fbu_parseagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,18 +63,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvHandle;
         private ImageView ivImage;
         private TextView tvDescription;
+        private TextView tvTime;
         private LinearLayout llBody;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
             tvHandle = itemView.findViewById(R.id.tvHandle);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvTime = itemView.findViewById(R.id.tvTimePosted);
             llBody = itemView.findViewById(R.id.llPost);
-
         }
 
-        public void bind (Post post) {
+        public void bind (final Post post) {
             //bind view elements to post
             tvHandle.setText(post.getUser().getUsername());
 //            ParseFile image = post.getImage();
@@ -81,7 +83,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 //                Glide.with(context).load(image.getUrl()).into(ivImage);
 //            }
             Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
+            //Make post clickable
+            llBody.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, DetailsActivity.class);
+                    i.putExtra("post", post);
+                    context.startActivity(i);
+                }
+            });
             tvDescription.setText(post.getDescription());
+            tvTime.setText(post.getKeyCreatedAt());
         }
     }
 }
