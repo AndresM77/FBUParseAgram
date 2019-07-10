@@ -2,8 +2,6 @@ package com.example.fbu_parseagram;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +11,6 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
-    private static final String imagePath = "/sdcard/DCIM/Camer/IMG";
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    private EditText descriptionInput;
-    private Button createButton;
-    private Button refreshButton;
-    private Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
         // define your fragments here
         final Fragment fragment1 = new TimelineFragment();
         final Fragment fragment2 = new ComposeFragment();
+        final Fragment fragment3 = new ProfileFragment();
 
         // handle navigation selection
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -54,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
                                 break;
                             case R.id.action_music:
                             default:
-                                fragment = fragment1;
+                                fragment = fragment3;
                                 break;
                         }
                         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();

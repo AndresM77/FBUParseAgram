@@ -22,8 +22,8 @@ public class TimelineFragment extends Fragment {
 
     private RecyclerView rvPosts;
     public final static String TAG = "TimelineFragment";
-    private PostsAdapter adapter;
-    private List<Post> mPosts;
+    protected PostsAdapter adapter;
+    protected List<Post> mPosts;
 
     public static TimelineFragment newInstance() {
         return new TimelineFragment();
@@ -52,9 +52,11 @@ public class TimelineFragment extends Fragment {
         queryPosts();
     }
 
-    private void queryPosts() {
+    public void queryPosts() {
         ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
         postQuery.include(Post.KEY_USER);
+        postQuery.setLimit(20);
+        postQuery.addDescendingOrder(Post.KEY_CREATED_AT);
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {

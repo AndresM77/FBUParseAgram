@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_parseagram.model.Post;
-import com.parse.ParseFile;
 
 import java.util.List;
 
@@ -61,10 +60,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public void bind (Post post) {
             //bind view elements to post
             tvHandle.setText(post.getUser().getUsername());
-            ParseFile image = post.getImage();
-            if(image != null) {
-                Glide.with(context).load(image.getUrl()).into(ivImage);
-            }
+//            ParseFile image = post.getImage();
+//            if(image != null) {
+//                Glide.with(context).load(image.getUrl()).into(ivImage);
+//            }
+            Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
             tvDescription.setText(post.getDescription());
         }
     }
