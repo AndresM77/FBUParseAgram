@@ -25,8 +25,8 @@
 
     <ImageView
         android:id="@+id/c_post_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginTop="8dp"
         android:text="Refresh"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,5 +39,5 @@
         android:layout_marginTop="8dp"
         android:text="Submit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/c_capture_image" />
+        app:layout_constraintTop_toBottomOf="@+id/c_post_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>
