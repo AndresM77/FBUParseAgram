@@ -44,7 +44,7 @@ public class DetailsActivity extends AppCompatActivity {
         tvHandle.setText(post.getUser().getUsername());
         Glide.with(this).load(post.getImage().getUrl()).into(ivImage);
         tvDescription.setText(post.getDescription());
-        tvTime.setText(post.getKeyCreatedAt());
+        tvTime.setText(post.getCreatedAt().toString());
     }
 
 }

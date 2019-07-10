@@ -93,7 +93,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 }
             });
             tvDescription.setText(post.getDescription());
-            tvTime.setText(post.getKeyCreatedAt());
+            tvTime.setText(post.getCreatedAt().toString());
         }
     }
 }
