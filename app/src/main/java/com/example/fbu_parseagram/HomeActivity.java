@@ -1,20 +1,16 @@
 package com.example.fbu_parseagram;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
-import com.example.fbu_parseagram.model.Post;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import java.util.List;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String imagePath = "/sdcard/DCIM/Camer/IMG";
@@ -34,6 +30,39 @@ public class HomeActivity extends AppCompatActivity {
                     .replace(R.id.container, TimelineFragment.newInstance())
                     .commit();
         }
+
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+        // define your fragments here
+        final Fragment fragment1 = new TimelineFragment();
+        final Fragment fragment2 = new CameraKitFragment();
+
+        // handle navigation selection
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        Fragment fragment;
+                        switch (item.getItemId()) {
+                            case R.id.action_favorites:
+                                fragment = fragment1;
+                                break;
+                            case R.id.action_schedules:
+                                fragment = fragment2;
+                                break;
+                            case R.id.action_music:
+                            default:
+                                fragment = fragment1;
+                                break;
+                        }
+                        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+                        return true;
+                    }
+                });
+        // Set default selection
+        bottomNavigationView.setSelectedItemId(R.id.action_favorites);
         /*
         //Setting view objects
         descriptionInput = findViewById(R.id.description_et);
@@ -82,44 +111,5 @@ public class HomeActivity extends AppCompatActivity {
         */
     }
 
-    private void createPost (String description, ParseFile imageFile, ParseUser user) {
-        final Post newPost = new Post();
-        newPost.setDescription(description);
-        newPost.setImage(imageFile);
-        newPost.setUser(user);
-
-        newPost.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("HomeActivity", "Create Post Success!");
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void loadTopPosts() {
-        // Setting up query
-        final Post.Query postQuery = new Post.Query();
-        postQuery.getTop().withUser();
-
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        Log.d("HomeActivity", "Post[" + i + "] = "
-                                + objects.get(i).getDescription()
-                                + "\nusername = " + objects.get(i).getUser().getUsername()
-                        );
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
 }
