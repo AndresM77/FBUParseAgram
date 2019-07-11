@@ -31,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button changeBtn;
     private Button returnBtn;
     private Button setBtn;
+    private Button signOutBtn;
 
     //Camera Variables
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
@@ -48,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
         changeBtn = findViewById(R.id.btnChange);
         setBtn = findViewById(R.id.btnSet);
         returnBtn = findViewById(R.id.btnReturn);
+        signOutBtn = findViewById(R.id.btnSignOut);
 
         changeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +71,15 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this, HomeActivity.class);
+                startActivity(i);
+            }
+        });
+
+        signOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseUser.logOut();
+                Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
                 startActivity(i);
             }
         });
