@@ -87,7 +87,6 @@ public class ProfileActivity extends AppCompatActivity {
         //Setting description
         userTxt.setText(ParseUser.getCurrentUser().getUsername());
         //Setting user image
-        ParseUser user = ParseUser.getCurrentUser();
         ParseFile image = (ParseFile) ParseUser.getCurrentUser().get("proImage");
         Glide.with(this).load(image.getUrl()).into(profileImg);
     }

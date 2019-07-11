@@ -13,7 +13,7 @@ import java.util.List;
 public class ProfileFragment extends TimelineFragment {
 
     @Override
-    public void queryPosts() {
+    public void queryPosts(boolean EndlessPagination) {
         ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
         postQuery.include(Post.KEY_USER);
         postQuery.setLimit(20);
