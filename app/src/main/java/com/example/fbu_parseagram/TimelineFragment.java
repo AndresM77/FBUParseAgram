@@ -11,10 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.fbu_parseagram.model.Like;
 import com.example.fbu_parseagram.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -127,6 +130,63 @@ public class TimelineFragment extends Fragment {
                     Post post = posts.get(i);
                     Log.d(TAG, "Post" + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
+            }
+        });
+    }
+
+    public void like(final Post post) {
+        if(!liked) {
+            Like like = new Like();
+            like.setUser(ParseUser.getCurrentUser());
+            like.setPost(post);
+            like.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e!=null) {
+                        Log.d(TAG, "Error while saving");
+                        e.printStackTrace();
+                        return;
+                    }
+                    queryLikes(post);
+                    Log.d(TAG, "Success, like saved");
+                    ibLikes.setImageResource(R.drawable.ufi_heart_active);
+                }
+            });
+        }else {
+            for (int i = 0; i < mLikes.size(); i++) {
+                if(mLikes.get(i).getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                    ibLikes.setImageResource(R.drawable.ufi_heart);
+                    mLikes.get(i).deleteInBackground();
+                    queryLikes(post);
+                }
+            }
+        }
+    }
+
+    public void queryLikes(Post post) {
+        ParseQuery<Like> postQuery = new ParseQuery<Like>(Like.class);
+        postQuery.whereEqualTo(Like.KEY_POST, post);
+
+        postQuery.findInBackground(new FindCallback<Like>() {
+            @Override
+            public void done(List<Like> likes, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with Querey");
+                    e.printStackTrace();
+                    return;
+                }
+                mLikes.clear();
+                mLikes.addAll(likes);
+                tvLikes.setText(String.valueOf(mLikes.size()));
+                for (int i = 0; i < mLikes.size(); i++) {
+                    if (mLikes.get(i).getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                        liked = true;
+                        ibLikes.setImageResource(R.drawable.ufi_heart_active);
+                        return;
+                    }
+                }
+                ibLikes.setImageResource(R.drawable.ufi_heart);
+                liked = false;
             }
         });
     }

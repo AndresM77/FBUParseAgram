@@ -68,12 +68,6 @@ public class DetailsActivity extends AppCompatActivity {
         queryLikes(post);
         tvLikes.setText(String.valueOf(mLikes.size()));
 
-        if (liked) {
-            ibLikes.setImageResource(R.drawable.ufi_heart_active);
-        } else {
-            ibLikes.setImageResource(R.drawable.ufi_heart);
-        }
-
         ibLikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,12 +89,12 @@ public class DetailsActivity extends AppCompatActivity {
         tvTime.setText(post.getCreatedAt().toString());
     }
 
-    public void like(Post post) {
+    public void like(final Post post) {
         if(!liked) {
             Like like = new Like();
             like.setUser(ParseUser.getCurrentUser());
             like.setPost(post);
-            post.saveInBackground(new SaveCallback() {
+            like.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e!=null) {
@@ -108,7 +102,8 @@ public class DetailsActivity extends AppCompatActivity {
                         e.printStackTrace();
                         return;
                     }
-                    Log.d(TAG, "Success");
+                    queryLikes(post);
+                    Log.d(TAG, "Success, like saved");
                     ibLikes.setImageResource(R.drawable.ufi_heart_active);
                 }
             });
@@ -117,10 +112,10 @@ public class DetailsActivity extends AppCompatActivity {
                 if(mLikes.get(i).getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
                     ibLikes.setImageResource(R.drawable.ufi_heart);
                     mLikes.get(i).deleteInBackground();
+                    queryLikes(post);
                 }
             }
         }
-        queryLikes(post);
     }
 
     public void queryLikes(Post post) {
@@ -137,16 +132,18 @@ public class DetailsActivity extends AppCompatActivity {
                 }
                 mLikes.clear();
                 mLikes.addAll(likes);
+                tvLikes.setText(String.valueOf(mLikes.size()));
                 for (int i = 0; i < mLikes.size(); i++) {
-                    if (mLikes.get(i).getUser().equals(ParseUser.getCurrentUser().getUsername())) {
+                    if (mLikes.get(i).getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
                         liked = true;
-                    } else {
-                        liked = false;
+                        ibLikes.setImageResource(R.drawable.ufi_heart_active);
+                        return;
                     }
                 }
+                ibLikes.setImageResource(R.drawable.ufi_heart);
+                liked = false;
             }
         });
-        tvLikes.setText(String.valueOf(mLikes.size()));
     }
 
 }
