@@ -47,6 +47,12 @@
         android:layout_height="20dp"
         android:background="@drawable/ufi_heart" />
 
+    <TextView
+        android:id="@+id/tvTotalLikes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Likes" />
+
     <ImageButton
         android:id="@+id/btnComment"
         android:layout_width="20dp"
