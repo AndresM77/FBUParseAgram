@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // show the signup or login screen
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         //Persistence functionality
         ParseUser currentUser = ParseUser.getCurrentUser();

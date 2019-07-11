@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -65,7 +66,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         //Like functionality
         queryLikes(post);
-        tvLikes.setText(mLikes.size());
+        tvLikes.setText(String.valueOf(mLikes.size()));
 
         if (liked) {
             ibLikes.setImageResource(R.drawable.ufi_heart_active);
@@ -76,6 +77,7 @@ public class DetailsActivity extends AppCompatActivity {
         ibLikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Liked", Toast.LENGTH_LONG).show();
                 like(post);
             }
         });
@@ -94,7 +96,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     public void like(Post post) {
-        if(liked) {
+        if(!liked) {
             Like like = new Like();
             like.setUser(ParseUser.getCurrentUser());
             like.setPost(post);
@@ -107,18 +109,18 @@ public class DetailsActivity extends AppCompatActivity {
                         return;
                     }
                     Log.d(TAG, "Success");
-                    ibLikes.setImageResource(R.drawable.ufi_heart);
+                    ibLikes.setImageResource(R.drawable.ufi_heart_active);
                 }
             });
         }else {
             for (int i = 0; i < mLikes.size(); i++) {
                 if(mLikes.get(i).getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
-                    ibLikes.setImageResource(R.drawable.ufi_heart_active);
+                    ibLikes.setImageResource(R.drawable.ufi_heart);
                     mLikes.get(i).deleteInBackground();
-                    queryLikes(post);
                 }
             }
         }
+        queryLikes(post);
     }
 
     public void queryLikes(Post post) {
@@ -144,6 +146,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+        tvLikes.setText(String.valueOf(mLikes.size()));
     }
 
 }
