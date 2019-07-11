@@ -17,6 +17,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TimelineFragment extends Fragment {
@@ -26,6 +27,8 @@ public class TimelineFragment extends Fragment {
     protected PostsAdapter adapter;
     protected List<Post> mPosts;
     private SwipeRefreshLayout swipeContainer;
+    // Store a member variable for the listener
+    private EndlessRecyclerViewScrollListener scrollListener;
 
 
     public static TimelineFragment newInstance() {
@@ -49,8 +52,10 @@ public class TimelineFragment extends Fragment {
         adapter = new PostsAdapter(getContext(), mPosts);
         //set adapter on recycler view
         rvPosts.setAdapter(adapter);
+        //Setting up linear layout manager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         //set layout manager on recycler view
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPosts.setLayoutManager(linearLayoutManager);
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
@@ -62,7 +67,7 @@ public class TimelineFragment extends Fragment {
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
                 swipeContainer.setRefreshing(false);
-                queryPosts();
+                queryPosts(false);
             }
         });
         // Configure the refreshing colors
@@ -70,17 +75,43 @@ public class TimelineFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+        //Setting up scroll listener
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
+            }
+        };
 
+        queryPosts(false);
+    }
 
-        queryPosts();
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+        queryPosts(true);
     }
 
 
-    public void queryPosts() {
+    public void queryPosts(boolean EndlessScrolling) {
         ParseQuery<Post> postQuery = new ParseQuery<Post>(Post.class);
         postQuery.include(Post.KEY_USER);
         postQuery.setLimit(20);
         postQuery.addDescendingOrder(Post.KEY_CREATED_AT);
+        Date maxDate;
+        //Endless Pagination Functionality
+        if (EndlessScrolling) {
+            maxDate = mPosts.get(mPosts.size() - 1).getCreatedAt();
+            postQuery.whereLessThan(Post.KEY_CREATED_AT, maxDate);
+        }
+
         postQuery.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
