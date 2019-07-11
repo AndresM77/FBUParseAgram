@@ -71,6 +71,9 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+//        ParseFile image = (ParseFile) ParseUser.getCurrentUser().get("proImage");
+//        MenuItem profile = findViewById(R.id.ivProfile);
+//        Glide.with(this).load(image.getUrl()).into();
         return true;
     }
 

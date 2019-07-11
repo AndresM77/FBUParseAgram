@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -74,6 +75,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         //Setting description
         userTxt.setText(ParseUser.getCurrentUser().getUsername());
+        //Setting user image
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseFile image = (ParseFile) ParseUser.getCurrentUser().get("proImage");
+        Glide.with(this).load(image.getUrl()).into(profileImg);
     }
 
     private void saveUser(ParseUser user, File photoFile) {

@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_parseagram.model.Post;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -61,6 +63,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvHandle;
+        private ImageView ivProfile;
         private ImageView ivImage;
         private TextView tvDescription;
         private TextView tvTime;
@@ -73,6 +76,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvTime = itemView.findViewById(R.id.tvTimePosted);
             llBody = itemView.findViewById(R.id.llPost);
+            ivProfile = itemView.findViewById(R.id.ivProfile);
         }
 
         public void bind (final Post post) {
@@ -92,8 +96,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     context.startActivity(i);
                 }
             });
+
             tvDescription.setText(post.getDescription());
             tvTime.setText(post.getCreatedAt().toString());
+
+            ParseFile image = (ParseFile) ParseUser.getCurrentUser().get("proImage");
+            if (image != null) {
+                Glide.with(context).load(image.getUrl()).into(ivProfile);
+            }
         }
     }
 }
