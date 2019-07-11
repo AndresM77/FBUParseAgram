@@ -18,6 +18,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Post post = getIntent().getParcelableExtra("post");
+        final Post post = getIntent().getParcelableExtra("post");
         mLikes = new ArrayList<>();
 
         tvHandle = findViewById(R.id.tvHandle);
@@ -63,12 +64,28 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
         //Like functionality
-        queryLikes();
+        queryLikes(post);
         tvLikes.setText(mLikes.size());
 
         if (liked) {
-            ibLikes.setImageResource();
+            ibLikes.setImageResource(R.drawable.ufi_heart_active);
+        } else {
+            ibLikes.setImageResource(R.drawable.ufi_heart);
         }
+
+        ibLikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                like(post);
+            }
+        });
+
+        ibComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         tvHandle.setText(post.getUser().getUsername());
         Glide.with(this).load(post.getImage().getUrl()).into(ivImage);
@@ -76,9 +93,37 @@ public class DetailsActivity extends AppCompatActivity {
         tvTime.setText(post.getCreatedAt().toString());
     }
 
-    public void queryLikes() {
+    public void like(Post post) {
+        if(liked) {
+            Like like = new Like();
+            like.setUser(ParseUser.getCurrentUser());
+            like.setPost(post);
+            post.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e!=null) {
+                        Log.d(TAG, "Error while saving");
+                        e.printStackTrace();
+                        return;
+                    }
+                    Log.d(TAG, "Success");
+                    ibLikes.setImageResource(R.drawable.ufi_heart);
+                }
+            });
+        }else {
+            for (int i = 0; i < mLikes.size(); i++) {
+                if(mLikes.get(i).getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                    ibLikes.setImageResource(R.drawable.ufi_heart_active);
+                    mLikes.get(i).deleteInBackground();
+                    queryLikes(post);
+                }
+            }
+        }
+    }
+
+    public void queryLikes(Post post) {
         ParseQuery<Like> postQuery = new ParseQuery<Like>(Like.class);
-        postQuery.include(Like.KEY_POST);
+        postQuery.whereEqualTo(Like.KEY_POST, post);
 
         postQuery.findInBackground(new FindCallback<Like>() {
             @Override

@@ -1,7 +1,6 @@
 package com.example.fbu_parseagram.model;
 
 import com.parse.ParseClassName;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -23,7 +22,7 @@ public class Like extends ParseObject{
         return getParseObject(KEY_POST);
     }
 
-    public void setPost(ParseFile image) {
+    public void setPost(ParseObject image) {
         put(KEY_POST, image);
     }
 }
