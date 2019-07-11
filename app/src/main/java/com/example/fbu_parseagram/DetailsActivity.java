@@ -10,7 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_parseagram.model.Like;
@@ -28,6 +31,7 @@ import java.util.List;
 public class DetailsActivity extends AppCompatActivity {
 
     public final static String TAG = "DetailsActivity";
+    public final static int REQUEST_CODE = 20;
 
     private TextView tvHandle;
     private ImageView ivImage;
@@ -39,17 +43,20 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView tvLikes;
     private ImageButton ibLikes;
     private ImageButton ibComment;
+    private RecyclerView rvComments;
     private boolean liked;
+    private Post post;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        final Post post = getIntent().getParcelableExtra("post");
+        post = getIntent().getParcelableExtra("post");
         mLikes = new ArrayList<>();
         mComments = new ArrayList<>();
 
+        //Setting view objects
         tvHandle = findViewById(R.id.tvHandle);
         ivImage = findViewById(R.id.ivImage);
         tvDescription = findViewById(R.id.tvDescription);
@@ -58,6 +65,12 @@ public class DetailsActivity extends AppCompatActivity {
         tvLikes = findViewById(R.id.tvTotalLikes);
         ibLikes = findViewById(R.id.btnLike);
         ibComment = findViewById(R.id.btnComment);
+        rvComments = findViewById(R.id.rvPosts);
+
+        //Setting up linear layout manager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        //set layout manager on recycler view
+        rvComments.setLayoutManager(linearLayoutManager);
 
         llBody.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +79,12 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
+//        //set adapter on recycler view
+//        adapter = new PostsAdapter(getContext(), mPosts);
+//        //set adapter on recycler view
+//        rvPosts.setAdapter(adapter);
 
         //Like functionality
         queryLikes(post);
@@ -83,7 +102,9 @@ public class DetailsActivity extends AppCompatActivity {
         ibComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                comment(post);
+                Intent i = new Intent(DetailsActivity.this, CommentActivity.class);
+                i.putExtra("post", post);
+                startActivityForResult(i, REQUEST_CODE);
             }
         });
 
@@ -91,6 +112,11 @@ public class DetailsActivity extends AppCompatActivity {
         Glide.with(this).load(post.getImage().getUrl()).into(ivImage);
         tvDescription.setText(post.getDescription());
         tvTime.setText(post.getCreatedAt().toString());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        queryComment(post);
     }
 
     public void like(final Post post) {

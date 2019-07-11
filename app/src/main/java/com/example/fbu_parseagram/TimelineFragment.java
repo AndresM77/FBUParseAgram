@@ -5,8 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,11 +29,6 @@ public class TimelineFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
-    private TextView tvLikes;
-    private ImageButton ibLikes;
-    private ImageButton ibComment;
-    private boolean liked;
-
 
     public static TimelineFragment newInstance() {
         return new TimelineFragment();
