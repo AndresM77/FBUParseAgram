@@ -148,24 +148,6 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void comment(final Post post) {
-        ParseComment comment = new ParseComment();
-        comment.setUser(ParseUser.getCurrentUser());
-        comment.setPost(post);
-        comment.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e!=null) {
-                    Log.d(TAG, "Error while saving");
-                    e.printStackTrace();
-                    return;
-                }
-                queryComment(post);
-                Log.d(TAG, "Success, comment saved");
-            }
-        });
-    }
-
     public void queryComment (Post post){
         ParseQuery<ParseComment> postQuery = new ParseQuery<ParseComment>(ParseComment.class);
         postQuery.whereEqualTo(Like.KEY_POST, post);
