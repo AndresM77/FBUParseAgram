@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_parseagram.model.Like;
+import com.example.fbu_parseagram.model.ParseComment;
 import com.example.fbu_parseagram.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -34,6 +35,7 @@ public class DetailsActivity extends AppCompatActivity {
     private LinearLayout llBody;
     private TextView tvTime;
     private List<Like> mLikes;
+    private List<ParseComment> mComments;
     private TextView tvLikes;
     private ImageButton ibLikes;
     private ImageButton ibComment;
@@ -46,6 +48,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         final Post post = getIntent().getParcelableExtra("post");
         mLikes = new ArrayList<>();
+        mComments = new ArrayList<>();
 
         tvHandle = findViewById(R.id.tvHandle);
         ivImage = findViewById(R.id.ivImage);
@@ -66,6 +69,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         //Like functionality
         queryLikes(post);
+        queryComment(post);
         tvLikes.setText(String.valueOf(mLikes.size()));
 
         ibLikes.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +83,7 @@ public class DetailsActivity extends AppCompatActivity {
         ibComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                comment(post);
             }
         });
 
@@ -116,6 +120,43 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void comment(final Post post) {
+        ParseComment comment = new ParseComment();
+        comment.setUser(ParseUser.getCurrentUser());
+        comment.setPost(post);
+        comment.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e!=null) {
+                    Log.d(TAG, "Error while saving");
+                    e.printStackTrace();
+                    return;
+                }
+                queryComment(post);
+                Log.d(TAG, "Success, comment saved");
+            }
+        });
+    }
+
+    public void queryComment (Post post){
+        ParseQuery<ParseComment> postQuery = new ParseQuery<ParseComment>(ParseComment.class);
+        postQuery.whereEqualTo(Like.KEY_POST, post);
+
+        postQuery.findInBackground(new FindCallback<ParseComment>() {
+            @Override
+            public void done(List<ParseComment> comments, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error with Querey");
+                    e.printStackTrace();
+                    return;
+                }
+                mComments.clear();
+                mComments.addAll(comments);
+                tvLikes.setText(String.valueOf(mLikes.size()));
+            }
+        });
     }
 
     public void queryLikes(Post post) {
