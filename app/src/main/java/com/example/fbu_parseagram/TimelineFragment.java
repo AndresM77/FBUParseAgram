@@ -27,6 +27,7 @@ public class TimelineFragment extends Fragment {
     protected List<Post> mPosts;
     private SwipeRefreshLayout swipeContainer;
 
+
     public static TimelineFragment newInstance() {
         return new TimelineFragment();
     }
@@ -98,7 +99,6 @@ public class TimelineFragment extends Fragment {
             }
         });
     }
-
 
 
 

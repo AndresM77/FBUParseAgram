@@ -27,4 +27,15 @@
         app:menu="@menu/menu_bottom_navigation"
         tools:layout_editor_absoluteX="0dp" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFF"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@android:color/white" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

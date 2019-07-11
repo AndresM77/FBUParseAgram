@@ -1,6 +1,7 @@
 package com.example.fbu_parseagram;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -56,13 +57,13 @@ public class HomeActivity extends AppCompatActivity {
                 });
         // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.action_favorites);
-
     }
 
-
-
-
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
 }
