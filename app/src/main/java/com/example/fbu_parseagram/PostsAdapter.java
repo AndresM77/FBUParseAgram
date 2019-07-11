@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,6 +66,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvHandle;
         private ImageView ivProfile;
         private ImageView ivImage;
+        private ImageButton ibLike;
+        private ImageButton ibComment;
         private TextView tvDescription;
         private TextView tvTime;
         private LinearLayout llBody;
@@ -77,6 +80,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvTime = itemView.findViewById(R.id.tvTimePosted);
             llBody = itemView.findViewById(R.id.llPost);
             ivProfile = itemView.findViewById(R.id.ivProfile);
+            ibLike = itemView.findViewById(R.id.btnLike);
+            ibComment = itemView.findViewById(R.id.btnComment);
         }
 
         public void bind (final Post post) {
@@ -104,6 +109,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivProfile);
             }
+
+            ibLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            ibComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
     }
 }

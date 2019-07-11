@@ -15,6 +15,7 @@ public class Post extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_PROFILE_IMAGE = "proImage";
+    public static final String KEY_COMMENT = "comment";
 
     @Override
     public Date getCreatedAt() {

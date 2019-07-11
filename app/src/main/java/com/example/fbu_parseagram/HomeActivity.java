@@ -72,8 +72,24 @@ public class HomeActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 //        ParseFile image = (ParseFile) ParseUser.getCurrentUser().get("proImage");
-//        MenuItem profile = findViewById(R.id.ivProfile);
-//        Glide.with(this).load(image.getUrl()).into();
+//        final MenuItem profile = findViewById(R.id.ivProfileBtn);
+//        Glide.with(this)
+//                .asBitmap()
+//                .load(image.getUrl())
+//                .into(new CustomTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//
+//                        Drawable drawable = new BitmapDrawable(resource);
+//                        //actionBar.setIcon(drawable);
+//                        profile.setIcon(drawable);
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//
+//                    }
+//                });
         return true;
     }
 
