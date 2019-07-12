@@ -95,7 +95,6 @@ public class ComposeFragment extends Fragment {
         post.setDescription(description);
         post.setUser(parseUser);
         post.setImage(new ParseFile(photoFile));
-
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

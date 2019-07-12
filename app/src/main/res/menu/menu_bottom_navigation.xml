@@ -5,18 +5,18 @@
         android:id="@+id/action_favorites"
         android:enabled="true"
         android:icon="@drawable/instagram_home_filled_24"
-        android:title="@string/text_favorites"
+        android:title="Home"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_schedules"
         android:enabled="true"
         android:icon="@drawable/instagram_new_post_filled_24"
-        android:title="@string/text_schedules"
+        android:title="Compose"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_music"
         android:enabled="true"
         android:icon="@drawable/instagram_user_filled_24"
-        android:title="@string/text_music"
+        android:title="Profile"
         app:showAsAction="ifRoom" />
 </menu>
