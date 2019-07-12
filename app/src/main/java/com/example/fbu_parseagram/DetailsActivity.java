@@ -46,6 +46,8 @@ public class DetailsActivity extends AppCompatActivity {
     private RecyclerView rvComments;
     private boolean liked;
     private Post post;
+    private CommentsAdapter adapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,10 @@ public class DetailsActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         //set layout manager on recycler view
         rvComments.setLayoutManager(linearLayoutManager);
+        //setting up adapter
+        adapter = new CommentsAdapter();
+        //set adapter on recycler view
+        rvComments.setAdapter(adapter);
 
         llBody.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,12 +85,6 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
-//        //set adapter on recycler view
-//        adapter = new PostsAdapter(getContext(), mPosts);
-//        //set adapter on recycler view
-//        rvPosts.setAdapter(adapter);
 
         //Like functionality
         queryLikes(post);
@@ -162,6 +162,7 @@ public class DetailsActivity extends AppCompatActivity {
                 }
                 mComments.clear();
                 mComments.addAll(comments);
+                adapter.notifyDataSetChanged();
                 tvLikes.setText(String.valueOf(mLikes.size()));
             }
         });
