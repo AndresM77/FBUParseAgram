@@ -184,6 +184,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     }
                     mLikes.clear();
                     mLikes.addAll(likes);
+                    //notifyDataSetChanged();
                     tvLikes.setText(String.valueOf(mLikes.size()));
                     for (int i = 0; i < mLikes.size(); i++) {
                         if (mLikes.get(i).getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
