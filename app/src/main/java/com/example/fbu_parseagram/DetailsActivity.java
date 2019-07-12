@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_parseagram.model.Like;
@@ -47,7 +48,7 @@ public class DetailsActivity extends AppCompatActivity {
     private boolean liked;
     private Post post;
     private CommentsAdapter adapter;
-
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,13 +69,14 @@ public class DetailsActivity extends AppCompatActivity {
         ibLikes = findViewById(R.id.btnLike);
         ibComment = findViewById(R.id.btnComment);
         rvComments = findViewById(R.id.rvPosts);
+        swipeContainer = findViewById(R.id.swipeContainer);
 
         //Setting up linear layout manager
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         //set layout manager on recycler view
         rvComments.setLayoutManager(linearLayoutManager);
         //setting up adapter
-        adapter = new CommentsAdapter();
+        adapter = new CommentsAdapter(getApplicationContext(), mComments);
         //set adapter on recycler view
         rvComments.setAdapter(adapter);
 
@@ -90,6 +92,18 @@ public class DetailsActivity extends AppCompatActivity {
         queryLikes(post);
         queryComment(post);
         tvLikes.setText(String.valueOf(mLikes.size()));
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                swipeContainer.setRefreshing(false);
+                queryComment(post);
+            }
+        });
 
         ibLikes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +165,10 @@ public class DetailsActivity extends AppCompatActivity {
     public void queryComment (Post post){
         ParseQuery<ParseComment> postQuery = new ParseQuery<ParseComment>(ParseComment.class);
         postQuery.whereEqualTo(Like.KEY_POST, post);
+
+        postQuery.include(ParseComment.KEY_USER);
+        postQuery.setLimit(20);
+        postQuery.addDescendingOrder(ParseComment.KEY_CREATED_AT);
 
         postQuery.findInBackground(new FindCallback<ParseComment>() {
             @Override
